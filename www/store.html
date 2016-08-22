@@ -1,0 +1,52 @@
+
+<ons-modal var="modal">
+    <i class="fa fa-spinner fa-spin fa-pulse" style="font-size: 28px;"></i>
+    <br><br>
+    Please wait ...
+</ons-modal>
+
+    <ons-page id="store-page" ng-controller="StoreController" style="background: #28292a">
+        <ons-toolbar class="toolbar" fixed-style="">
+            <div class="center">
+                M & E Store
+            </div>
+            <div class="left">
+                <ons-toolbar-button ng-click="onHistoryClick();"><ons-icon icon="history" class="icon-color"></ons-icon></ons-toolbar-button>
+                <ons-toolbar-button ng-click="onSearchClick();"><ons-icon icon="search" class="icon-color"></ons-icon></ons-toolbar-button>
+            </div>
+            <div class="right">
+                <ons-toolbar-button ng-click="onPlaylistClick();" disabled ng-if="!showPlayer">
+                    <ons-icon icon="music" class="icon-color"></ons-icon>
+                </ons-toolbar-button>
+                <ons-toolbar-button ng-click="onPlaylistClick();" ng-if="showPlayer">
+                    <ons-icon icon="music" class="icon-color"></ons-icon>
+                </ons-toolbar-button>
+                <ons-toolbar-button ng-click="onProfileClick();"><ons-icon icon="user" class="icon-color"></ons-icon></ons-toolbar-button>
+            </div>
+        </ons-toolbar>
+        
+        <div class="wrapper" style="margin-bottom: 5px;">
+            <div class="container">
+                <ul class="grid-na rig columns-2">
+                    <li ng-repeat="item in musicOptions">
+                        <ons-button modifier="quiet" ng-click="onOptionSelect(item, $index);" style="margin: -3px 0 -10px 0;">
+                            <span ng-if="$index !== 3">
+                                <ons-icon icon="{{item.icon}}" class="live-color icon-action"></ons-icon><br />
+                            </span>
+                            <span ng-if="$index === 3">
+                                <span ng-if="!isDownloading">
+                                    <ons-icon icon="{{item.icon}}" class="live-color icon-action"></ons-icon><br />
+                                </span>
+                                <span ng-if="isDownloading">
+                                    <img src="images/loading.gif" style="width: 28px; margin-bottom: -8px;" /><br />
+                                </span>
+                            </span>
+                            <span class="classify-item" style="width: 100%; text-align: center;">{{item.desc}}</span>
+                        </ons-button>
+                    </li>
+            	</ul>
+            </div>
+        </div>
+        
+    </ons-page>
+    

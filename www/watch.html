@@ -1,0 +1,201 @@
+
+<ons-modal var="modal">
+    <i class="fa fa-spinner fa-spin fa-pulse" style="font-size: 28px;"></i>
+    <br><br>
+    Please wait ...
+</ons-modal>
+
+    <ons-page id="watch-page" ng-controller="WatchController" style="background: #28292a">
+        <ons-toolbar class="toolbar" fixed-style="">
+            <div class="center">
+                <div class="navigation-bar toolbar-color">
+                    <div class="navigation-bar__center">
+                        <div class="button-bar segment">
+                            <div class="button-bar__item" ng-click="onTVClick()" ng-if="showTV">
+                                <input type="radio" name="navi-segment-a" checked>
+                                <div class="button-bar__button">TV</div>
+                            </div>
+                            <div class="button-bar__item" ng-click="onMVClick()">
+                                <input type="radio" name="navi-segment-a" checked ng-if="!showTV">
+                                <input type="radio" name="navi-segment-a" ng-if="showTV">
+                                <div class="button-bar__button">MV</div>
+                            </div>
+                            <div class="button-bar__item" ng-click="onSerieClick()">
+                                <input type="radio" name="navi-segment-a">
+                                <div class="button-bar__button">Radio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="left">
+                <ons-toolbar-button ng-click="onProfileClick();">
+                    <ons-icon icon="navicon" class="icon-color"></ons-icon>
+                </ons-toolbar-button>
+            </div>
+            <div class="right">
+                <ons-toolbar-button ng-click="onPlaylistClick();" disabled ng-if="!showPlayer">
+                    <ons-icon icon="music" class="icon-color"></ons-icon>
+                </ons-toolbar-button>
+                <ons-toolbar-button ng-click="onPlaylistClick();" ng-if="showPlayer">
+                    <ons-icon icon="music" class="icon-color"></ons-icon>
+                </ons-toolbar-button>
+            </div>
+        </ons-toolbar>
+        
+        <ons-list ng-if="!isOnline">
+            <ons-list-item>
+                <div class="info" style="color: #FF5E3A;">
+                    No Internet connection found.
+                </div>
+            </ons-list-item>
+        </ons-list>
+        
+        <div class="wrapper" style="margin-bottom: 5px;">
+            <div class="container">
+                <ul class="grid-na rig columns-5">
+                    <li ng-repeat="item in musicOptions">
+                        <ons-button modifier="quiet" ng-click="onOptionSelect(item, $index);" style="margin: -3px 0 -10px 0;">
+                            <span ng-if="$index !== 3">
+                                <ons-icon icon="{{item.icon}}" class="live-color icon-action"></ons-icon><br />
+                            </span>
+                            <span ng-if="$index === 3">
+                                <span ng-if="!isDownloading">
+                                    <ons-icon icon="{{item.icon}}" class="live-color icon-action"></ons-icon><br />
+                                </span>
+                                <span ng-if="isDownloading">
+                                    <img src="images/loading.gif" style="width: 28px; margin-bottom: -8px;" /><br />
+                                </span>
+                            </span>
+                            <span class="classify-item" style="width: 100%; text-align: center;">{{item.desc}}</span>
+                        </ons-button>
+                	</li>
+        		</ul>
+            </div>
+        </div>
+        
+        <div ng-show="choice===1">
+            <ons-list class="wrapper-album">
+                <ons-list-item class="internal" ng-repeat="item in mvs | filter: 'release'" ng-click="onMVSelect(item);">
+                    <img ng-src="{{mvPath}}/{{item.album}}/{{item.thumb}}" class="list-new-album"></img>
+                </ons-list-item>
+            </ons-list>
+            <ons-list style="margin-top: -10px;">
+                <ons-list-item ng-show="showNoItem">
+                    <div class="info">
+                        No Available TV Channel.
+                    </div>
+                </ons-list-item>
+                <ons-list-item modifier="tappable" class="list-item" ng-repeat="item in items | filter:{type: 'tv'} | filter:searchText" ng-click="onItemSelect(item);">
+                    <ons-row>
+                        <ons-col width="105px">
+                            <img ng-src="{{thumbPath}}/{{item.thumb}}" class="list-item-thum"></img>
+                        </ons-col>
+                        <ons-col>
+                            <div class="item-title">
+                                {{ item.name }}
+                            </div>
+                            <div class="item-desc">
+                                {{ item.name_kh }}
+                            </div>
+                            <div class="item-more">
+                                {{ item.description }}
+                            </div>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
+        </div>
+
+        <div ng-show="choice===2">
+            <div class="info" ng-if="isLoading">
+                <img src="images/loading.gif" class="loading" />
+            </div>
+            <ons-list ng-show="!isLoading && showNoItem">
+                <ons-list-item>
+                    <div class="info">
+                        No Available MV.
+                    </div>
+                </ons-list-item>
+            </ons-list>
+            <div style="margin: 15px;">
+                
+            </div>
+            <div ng-repeat="pro in productions | filter: 'VCD'" ng-if="!isLoading_mv && mvs.length > 0">
+                <div class="section-header">
+                    {{ pro.mv }} - Music Video
+                    <ons-button modifier="quiet" class="see-all" ng-click="onSeeAllMVClick(pro.production);">
+                        See All <ons-icon icon="angle-right"></ons-icon>
+                    </ons-button>
+                </div>
+                <ons-list class="wrapper-album">
+                    <ons-list-item class="internal" ng-repeat="item in mvs | filter:searchText | filter: pro.mv" ng-click="onMVSelect(item);">
+                        <img ng-src="{{mvPath}}/{{item.album}}/{{item.thumb}}" class="list-mv-album"></img>
+                    </ons-list-item>
+                </ons-list>
+            </div>
+        </div>
+        
+        <div ng-show="choice===3">
+            <ons-list class="wrapper-album">
+                <ons-list-item 
+                    class="internal" ng-repeat="item in items | filter:{type: 'archive'}" ng-click="onItemSelect(item);">
+                        <img ng-src="{{thumbPath}}/{{item.thumb}}" class="list-radio-archive"></img>
+                </ons-list-item>
+            </ons-list>
+            <ons-list class="ons-list" modifier="noborder" style="margin-top: -10px;">
+                <ons-list-item style="margin-top: 10px;" ng-show="showNoItem">
+                    <div class="info">
+                        No Available Live Radio.
+                    </div>
+                </ons-list-item>
+                <ons-list-item modifier="tappable" class="list-item" ng-repeat="item in items | filter: filterMe" ng-click="onItemSelect(item);">
+                    <ons-row>
+                        <ons-col width="105px">
+                        <img ng-src="{{thumbPath}}/{{item.thumb}}" class="list-item-thum"></img>
+                        </ons-col>
+                        <ons-col>
+                            <div class="item-title">
+                                {{ item.name }}
+                            </div>
+                            <div class="item-desc">
+                                {{ item.name_kh }}
+                            </div>
+                            <div class="item-more">
+                                {{ item.description }}
+                            </div>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
+            
+            <div class="info" ng-if="isLoading">
+                <img src="images/loading.gif" class="loading" />
+            </div>
+            <ons-list ng-if="!isLoading">
+                <ons-list-item ng-show="showNoItem">
+                    <div class="info">
+                        No Available Shows.
+                    </div>
+                </ons-list-item>
+                <ons-list-item modifier="chevron" class="list-item" ng-repeat="item in series | filter:searchText" ng-click="onSerieSelect(item);">
+                    <ons-row>
+                        <ons-col width="105px">
+                            <img ng-src="{{seriePath}}/{{item.thumb}}" class="list-item-thum"></img>
+                        </ons-col>
+                        <ons-col>
+                            <div class="item-title">
+                                {{ item.serie }}
+                            </div>
+                            <div class="item-desc">
+                                {{ item.description }}
+                            </div>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
+        </div>
+        
+    </ons-page>
+    
+    

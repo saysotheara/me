@@ -1,0 +1,188 @@
+
+<ons-modal var="modal">
+    <i class="fa fa-spinner fa-spin fa-pulse" style="font-size: 28px;"></i>
+    <br><br>
+    Please wait ...
+</ons-modal>
+
+    <ons-page id="radio-page" ng-controller="OfflineController_playback" style="background: #28292a">
+        <ons-toolbar class="toolbar" fixed-style="">
+            <div class="center">
+                ស្ដាប់កំសាន្ត
+            </div>
+            <div class="left">
+                <ons-toolbar-button ng-click="onHistoryClick();"><ons-icon icon="history" class="icon-color"></ons-icon></ons-toolbar-button>
+            </div>
+            <div class="right">
+                <ons-toolbar-button ng-click="onSwitchPlayerClick();" ng-if="showPlayer">
+                    <ons-icon icon="{{switchIcon}}" class="icon-color"></ons-icon>
+                </ons-toolbar-button>
+                <ons-toolbar-button disabled ng-if="!showPlayer">
+                    <ons-icon icon="music" class="icon-color"></ons-icon>
+                </ons-toolbar-button>
+            </div>
+        </ons-toolbar>
+            <ons-list ng-if="musicNow===''">
+                <ons-list-item>
+                    <div class="info">
+                        No Playing Music..
+                    </div>
+                </ons-list-item>
+            </ons-list>
+            <div ng-if="switchIcon==='music' && musicNow!==''">
+            <ons-list style="background: #28292a">
+                <ons-list-item>
+                    <ons-row>
+                        <ons-col width="50px">
+                            <div style="margin: 15px 0 0 5px;">
+                                <img ng-src="images/loading.gif" style="width: 89px; margin-left: 10px;" ng-if="isOnline && isChecking"></img>
+                                <img ng-src="{{musicPath}}/{{musicNow.album}}/{{musicNow.thumb}}" style="width: 102px; height: 89px;" ng-if="isOnline && !isChecking"></img>
+                                <img ng-src="images/offline.jpg" style="width: 102px; height: 89px;" ng-if="!isOnline"></img>
+                            </div>
+                        </ons-col>
+                        <ons-col>
+                            <div class="playlist-now">
+                                {{ musicNow.title }}
+                            </div>
+                            <div class="playlist-now">
+                                <i class="fa fa-user-secret live-color" style="font-size: 12px;"></i> {{ musicNow.artist }}
+                            </div>
+                            <div class="playlist-now">
+                                <i class="fa fa-qrcode live-color" style="font-size: 13px;"></i> {{ musicNow.album }}
+                            </div>
+                            <div class="playlist-now">
+                                <i class="fa fa-heart-o live-color" style="font-size: 13px;"></i> 
+                                    {{ formatNumber(musicNow.liked) }} &nbsp;
+                                <i class="fa fa-ellipsis-v live-color" style="font-size: 12px;"></i> &nbsp;
+                                <i class="fa fa-headphones live-color" style="font-size: 13px;"></i> 
+                                    {{ formatNumber(musicNow.view) }} &nbsp;
+                                <i class="fa fa-ellipsis-v live-color" style="font-size: 12px;"></i> &nbsp;
+                                <i class="fa fa-at live-color" style="font-size: 13px;"></i> 
+                                    {{ musicNow_index + 1 }}
+                                <img src="images/bars.gif" style="margin-bottom: -2px;" ng-show="player.playing" />
+                            </div>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
+            <ons-list class="ons-list">
+                <ons-list-item modifier="tappable" class="playlist-list" ng-repeat="item in music_playlists | limitTo: limitToMusic">
+                    <ons-row>
+                        <ons-col width="25px" ng-click="onPlaylistSelect(item, $index);">
+                            <div class="playlist-num">
+                                <span ng-show="{{item.id}}!==musicNow.id">{{ $index + 1 }}</span>
+                                <span ng-show="{{item.id}}===musicNow.id">
+                                    <span ng-show="!player.playing"><i class="fa fa-play play-color" style="font-size: 15px;"></i></span>
+                                    <span ng-show="player.playing"><img src="images/bars.gif" alt="" /></span>
+                                </span>
+                            </div>
+                        </ons-col>
+                        <ons-col width="60px" ng-click="onPlaylistSelect(item, $index);">
+                            <img ng-src="{{musicPath}}/{{item.album}}/{{item.thumb}}" class="playlist-thum" ng-if="isOnline"></img>
+                            <img ng-src="images/offline.jpg" class="playlist-thum" ng-if="!isOnline"></img>                        
+                        </ons-col>
+                        <ons-col ng-click="onPlaylistSelect(item, $index);">
+                            <div class="playlist-title">
+                                {{ item.title }}
+                            </div>
+                            <div class="playlist-desc" style="margin-right: -24px;">
+                                {{ item.artist }}
+                                <span ng-show="item.src.indexOf('superean.com') == -1" style="float: right;"><i class="fa fa-cloud-download live-color" style="font-size: 11px;"></i></span>
+                            </div>
+                        </ons-col>
+                        <ons-button modifier="quiet" class="button-action" ng-click="onButtonClick_playlist(item, $index);">
+                            <i class="fa fa-navicon live-color button-action-icon"></i>
+                        </ons-button>
+                    </ons-row>
+                </ons-list-item>
+                <ons-list-item modifier="tappable" class="list-music" ng-click="onLoadMusicClick();" ng-if="music_playlists.length > 0 && music_playlists.length > limitToMusic">
+                    <ons-row>
+                        <ons-col width="25px">
+                            <div class="music-num">
+                                {{ limitToMusic + 1 }}
+                            </div>
+                        </ons-col>
+                        <ons-col width="75px">
+                            <img ng-src="images/more.jpg" class="list-music-thum" style="opacity: 0.2;" />
+                        </ons-col>
+                        <ons-col>
+                            <div class="music-title">
+                                Load more music...
+                            </div>
+                            <div class="music-desc">
+                                Click here to see more music...
+                            </div>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
+            </div>
+            <div class="profile-card-offline" ng-if="switchIcon==='list-alt' && musicNow!==''">
+                    <img ng-src="{{musicPath}}/{{musicNow.album}}/{{musicNow.thumb}}" class="profile-image" ng-if="isOnline"></img>
+                    <img ng-src="images/offline.jpg" class="profile-image" ng-if="!isOnline"></img>
+                    <div class="profile-name">{{ musicNow.title }}</div>
+                    <div class="profile-id"><i class="fa fa-user-secret live-color" style="font-size: 12px;"></i> {{ musicNow.artist }}</div>
+                    <div class="profile-desc"><i class="fa fa-qrcode live-color" style="font-size: 13px;"></i> {{ musicNow.album }}</div>
+                    <div class="profile-desc">
+                        <i class="fa fa-heart-o live-color" style="font-size: 13px;"></i> 
+                            {{ formatNumber(musicNow.liked) }} &nbsp;
+                        <i class="fa fa-ellipsis-v live-color" style="font-size: 12px;"></i> &nbsp;
+                        <i class="fa fa-headphones live-color" style="font-size: 13px;"></i> 
+                            {{ formatNumber(musicNow.view) }} &nbsp;
+                        <i class="fa fa-ellipsis-v live-color" style="font-size: 12px;"></i> &nbsp;
+                        <i class="fa fa-at live-color" style="font-size: 13px;"></i> 
+                            {{ musicNow_index + 1 }}
+                    </div>
+                    <div class="profile-desc">
+                        <span ng-show="!player.playing">
+                            <i class="fa fa-play play-color" style="font-size: 14px; margin: 4px 2px 0 3px;"></i>
+                        </span> 
+                        <span ng-show="player.playing"><img src="images/bars.gif" alt="" /></span> 
+                            {{ formatTime(player.currentTime) }} <i class="fa fa-arrows-h"></i> {{ formatTime(player.duration) }}
+                        <span style="display: none;">
+                            {{ musicSlider = (!player.currentTime) ? 0 : player.currentTime * 100 / player.duration }}
+                        </span>
+                    </div>
+                    <div class="profile-desc">
+                        <ons-button modifier="quiet" ng-click="onShuffleClick();">
+                            <ons-icon icon="random" class="icon-shuffle-off" style="font-size: 23px;" ng-if="!isShuffle"></ons-icon>
+                            <ons-icon icon="random" class="icon-shuffle-on" style="font-size: 23px;" ng-if="isShuffle"></ons-icon>
+                        </ons-button>
+                        <input type="range" class="range" style="width: 220px; margin-top: 5px;" ng-model="musicSlider" disabled="">
+                        <ons-button modifier="quiet" ng-click="onRepeatClick();">
+                            <ons-icon icon="ion-arrow-swap" class="icon-repeat-off" style="font-size: 28px;" ng-if="!isRepeat"></ons-icon>
+                            <ons-icon icon="ion-arrow-swap" class="icon-repeat-on" style="font-size: 28px;" ng-if="isRepeat"></ons-icon>
+                        </ons-button>
+                    </div>
+
+                    <div style="text-align: center; line-height: 44px; margin-top: 20px;">
+                        <ons-toolbar-button modifier="quiet" ng-click="onFavoriteClick()" class="button-player">
+                            <i class="fa fa-heart-o" style="font-size: 25px;"></i>
+                        </ons-toolbar-button>
+                        <ons-toolbar-button modifier="quiet" ng-click="onPlayPrevious()" class="button-player">
+                            <i class="fa fa-backward" style="font-size: 25px;"></i>
+                        </ons-toolbar-button>
+                        <ons-toolbar-button modifier="quiet" class="button-player" ng-if="isStarting">
+                            <i class="fa fa-circle-o-notch fa-spin" style="font-size: 21px;"></i>
+                        </ons-toolbar-button>
+                        <span ng-show="player.playing">
+                            <ons-toolbar-button modifier="quiet" ng-click="player.pause()" class="button-player" ng-if="!isStarting">
+                                <i class="fa fa-pause" style="font-size: 25px;"></i>
+                            </ons-toolbar-button>
+                        </span>
+                        <span ng-show="!player.playing">
+                            <ons-toolbar-button modifier="quiet" ng-click="player.play()" class="button-player" ng-if="!isStarting">
+                                <i class="fa fa-play" style="font-size: 27px;"></i>
+                            </ons-toolbar-button>
+                        </span>
+                        <ons-toolbar-button modifier="quiet" ng-click="onPlayNext()" class="button-player">
+                            <i class="fa fa-forward" style="font-size: 25px;"></i>
+                        </ons-toolbar-button>
+                        <ons-toolbar-button modifier="quiet" ng-click="onAddToPlaylistClick()" class="button-player">
+                            <i class="fa fa-plus-square-o" style="font-size: 25px;"></i>
+                        </ons-toolbar-button>
+                    </div>
+            </div>
+        
+    </ons-page>
+    

@@ -1,0 +1,51 @@
+
+<ons-modal var="modal">
+    <i class="fa fa-spinner fa-spin fa-pulse" style="font-size: 28px;"></i>
+    <br><br>
+    Please wait ...
+</ons-modal>
+
+    <ons-page id="radio-page" ng-controller="OfflineController_playlist" style="background: #28292a">
+        <ons-toolbar class="toolbar" fixed-style="">
+            <div class="center">
+                My Playlist
+            </div>
+            <div class="left">
+                <ons-toolbar-button ng-click="onHistoryClick();"><ons-icon icon="history" class="icon-color"></ons-icon></ons-toolbar-button>
+            </div>
+            <div class="right">
+                <ons-toolbar-button ng-click="onOfflinePlaylistAdd();"><span class="icon-color">New</span></ons-toolbar-button>
+            </div>
+        </ons-toolbar>
+
+        <ons-list ng-show="showNoItem">
+            <ons-list-item ng-click="onOfflinePlaylistAdd();">
+                <div class="info">
+                    No Offline Playlist.
+                </div>
+            </ons-list-item>
+        </ons-list>
+        <ons-list class="ons-list" ng-if="playlists.length > 0">
+            <ons-list-item modifier="tappable" class="my_playlist-list" ng-repeat="item in playlists">
+                <ons-row>
+                    <ons-col width="25px" ng-click="onOfflinePlaylistSelect(item, $index);">
+                        <div class="my_playlist-num live-color">
+                            {{ $index + 1 }}.
+                        </div>
+                    </ons-col>
+                    <ons-col width="10px">
+                    </ons-col>
+                    <ons-col ng-click="onOfflinePlaylistSelect(item, $index);">
+                        <div class="my_playlist-title">
+                            {{ item.name }}
+                        </div>
+                    </ons-col>
+                    <ons-button modifier="quiet" class="button-action" ng-click="onOfflinePlaylistButtonClick(item, $index);">
+                        <i class="fa fa-navicon live-color button-action-icon"></i>
+                    </ons-button>
+                </ons-row>
+            </ons-list-item>
+        </ons-list>
+        
+    </ons-page>
+    

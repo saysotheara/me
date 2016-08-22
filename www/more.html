@@ -1,0 +1,92 @@
+
+<ons-modal var="modal">
+    <i class="fa fa-spinner fa-spin fa-pulse" style="font-size: 28px;"></i>
+    <br><br>
+    Please wait ...
+</ons-modal>
+
+    <ons-page id="more-page" ng-controller="MoreViewController" style="background: #28292a;">
+            <ons-toolbar class="toolbar" fixed-style="">
+                <div class="center">
+                    More Contents
+                </div>
+                <div class="left">
+                    <ons-toolbar-button ng-click="onProfileClick();">
+                        <ons-icon icon="navicon" class="icon-color"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="right">
+                    <ons-toolbar-button ng-click="onPlaylistClick();" disabled ng-if="!showPlayer">
+                        <ons-icon icon="music" class="icon-color"></ons-icon>
+                    </ons-toolbar-button>
+                    <ons-toolbar-button ng-click="onPlaylistClick();" ng-if="showPlayer">
+                        <ons-icon icon="music" class="icon-color"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+            </ons-toolbar>
+        
+            <ons-list style="background: #57595b;">
+                <ons-list-item style="line-height: 1; padding: 0;">
+                    <ons-row class="action">
+                        <ons-col class="action-col" ng-click="onAppleClick()">
+                          <div class="action-icon"><img src="images/apple.png" style="width: 85%;" /></div>
+                        </ons-col>
+                        <ons-col class="action-col" ng-click="onFacebookClick()">
+                          <div class="action-icon"><img src="images/facebook.png" style="width: 95%;" /></div>
+                        </ons-col>
+                        <ons-col class="action-col" ng-click="onGoogleClick()">
+                          <div class="action-icon"><img src="images/google.png" style="width: 85%;" /></div>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>        
+            </ons-list>
+<!--            
+            <ons-list class="ons-list" style="margin-top: 10px; background: #57595b;">
+                <ons-list-item modifier="chevron" class="list__item__line-height" ng-click="onNewsClick()">
+                    <i class="fa fa-newspaper-o" style="color: #fff"></i>
+                    <span style="color: #fff;">&nbsp; News</span>
+                </ons-list-item>
+            </ons-list>
+-->
+            <ons-list class="ons-list" style="margin-top: 10px; background: #57595b;">
+                <ons-list-item modifier="chevron" class="list__item__line-height" ng-click="onRadioClick()">
+                    <i class="fa fa-headphones fa-lg" style="color: #fff"></i>
+                    <span style="color: #fff;">&nbsp; Radio</span>
+                </ons-list-item>
+            </ons-list>
+
+            <ons-list class="ons-list" style="margin-top: 10px; background: #57595b;" ng-if="showTV">
+                <ons-list-item modifier="chevron" class="list__item__line-height" ng-click="onTVClick()">
+                    <i class="fa fa-tv" style="color: #fff"></i>
+                    <span style="color: #fff;">&nbsp; Khmer TV</span>
+                </ons-list-item>
+            </ons-list>
+<!--
+            <ons-list class="ons-list" style="margin-top: 10px; background: #57595b;">
+                <ons-list-item modifier="chevron" class="list__item__line-height" ng-click="onShowClick()">
+                    <i class="fa fa-video-camera" style="color: #fff"></i>
+                    <span style="color: #fff;">&nbsp; Shows, Videos, & Movies</span>
+                </ons-list-item>
+            </ons-list>
+-->
+            <ons-list class="ons-list" style="margin-top: 10px; background: #57595b;">
+                <ons-list-item modifier="chevron" class="list__item__line-height" ng-click="onSettingClick()">
+                    <i class="fa fa-gear fa-lg" style="color: #fff"></i>
+                    <span style="color: #fff;">&nbsp; App Settings</span>
+                </ons-list-item>
+            </ons-list>
+
+            <ons-list class="ons-list" style="margin-top: 10px; background: #57595b;">
+                <ons-list-item modifier="chevron" class="list__item__line-height" ng-click="onRateClick()">
+                    <i class="fa fa-commenting-o fa-lg" style="color: #fff"></i>
+                    <span style="color: #fff;">&nbsp;Tell Us What You Think</span>
+                </ons-list-item>
+            </ons-list>
+
+            <div class="sponsor-list" ng-repeat="item in sponsors | filter: { more: 'yes'}" ng-click="onSponsorSelect(item);">
+                <img ng-src="{{sponsorPath}}/{{item.thumb}}" class="sponsor-list-thumb"></img>
+            </div>
+
+    </ons-page>
+    
+        

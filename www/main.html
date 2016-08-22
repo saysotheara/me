@@ -1,0 +1,18 @@
+
+<ons-page id="main-page" ng-controller="MainController">
+    <ons-tabbar var="mainTab">
+        <ons-tab page="home.html" label="Discover" icon="shield" active="true" ng-click="onDiscoverTabClick();"></ons-tab>
+        <ons-tab page="mv.html" label="K-MV" icon="youtube-play" ng-if="isOnline"></ons-tab>
+        <ons-tab page="music.html" label="Music" icon="music" ng-if="isOnline"></ons-tab>
+        <ons-tab page="library.html" label="Library" icon="book" ng-if="isOnline"></ons-tab>
+        <ons-tab page="more.html" label="More" icon="ellipsis-h" ng-click="onMoreTabClick();" ng-if="isOnline"></ons-tab>
+        <ons-tab page="offline_playing.html" label="Playing" icon="youtube-play" ng-if="!isOnline"></ons-tab>
+        <ons-tab page="offline_music.html" label="Music" icon="music" ng-if="!isOnline"></ons-tab>
+        <ons-tab page="offline_playlist.html" label="Playlist" icon="book" ng-if="!isOnline"></ons-tab>
+        <ons-tab page="setting.html" label="Settings" icon="gear" ng-if="!isOnline"></ons-tab>
+    </ons-tabbar>
+    
+    <audio media-player="player" id="player" data-playlist="music_playlists"></audio>
+
+</ons-page>
+
